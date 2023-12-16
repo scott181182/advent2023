@@ -1,0 +1,10 @@
+version: '3'
+services:
+  kotlin:
+    container_name: AoC-Day2
+    working_dir: /app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ".:/app:rw"
