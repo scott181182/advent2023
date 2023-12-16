@@ -34,6 +34,9 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Python
 - Forth
 
+My goal isn't to make the most optimized solution each day, but to make a fun solution in the given language and keep
+the code looking _good enough_.
+
 ## Setup
 
 Since each of these languages will introduce their own mess of language support and libraries, I'll be using Docker to
