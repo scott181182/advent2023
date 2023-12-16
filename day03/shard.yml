@@ -1,0 +1,13 @@
+name: aoc-day03
+version: 1.0.0
+
+authors:
+  - Scott Fasone
+
+targets:
+  aoc-day03:
+    main: src/aoc-day03.cr
+
+crystal: '>= 1.10.1'
+
+license: Public Domain
