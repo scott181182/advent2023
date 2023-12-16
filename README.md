@@ -7,6 +7,8 @@ Repository for my solutions to [Advent of Code 2023](https://adventofcode.com/20
 Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to determine what programming language (or similar) I'll use to solve those problems. The candidate languages are as follows:
 
 - Java ([Day 1](./day01/README.md))
+- Kotlin ([Day 2](./day02/README.md))
+- Crystal ([Day 3](./day03/README.md))
 - Ruby
 - Prolog
 - Haskell
@@ -20,10 +22,8 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - TypeScript
 - Racket
 - Bash
-- Crystal
 - Groovy
 - Lua
-- Kotlin
 - Blockly
 - PureScript
 - C#
