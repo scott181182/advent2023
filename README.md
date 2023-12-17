@@ -9,12 +9,12 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Java ([Day 1](./day01/README.md))
 - Kotlin ([Day 2](./day02/README.md))
 - Crystal ([Day 3](./day03/README.md))
+- Perl ([Day 4](./day04/README.md))
 - Ruby
 - Prolog
 - Haskell
 - Go
 - Processing
-- Perl
 - MatLab
 - C++
 - Assembly
