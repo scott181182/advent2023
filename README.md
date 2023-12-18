@@ -10,6 +10,7 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Kotlin ([Day 2](./day02/README.md))
 - Crystal ([Day 3](./day03/README.md))
 - Perl ([Day 4](./day04/README.md))
+- PureScript ([Day 5](./day05/README.md))
 - Ruby
 - Prolog
 - Haskell
@@ -25,7 +26,6 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Groovy
 - Lua
 - Blockly
-- PureScript
 - C#
 - PHP
 - Rust

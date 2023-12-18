@@ -1,0 +1,7 @@
+.spago
+# Spago builds the application into this directory
+output/
+
+# Actual executable build directory
+dist/*
+!dist/.keep

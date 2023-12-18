@@ -1,0 +1,10 @@
+version: '3'
+services:
+  purescript:
+    container_name: AoC-Day5
+    working_dir: /app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ".:/app:rw"
