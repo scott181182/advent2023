@@ -4,7 +4,7 @@
 SRC_DIR = src
 SRC_EXT = purs
 OUT_DIR = dist
-OUT_EXT = js
+OUT_EXT = mjs
 
 PART1_SRC_FILE = Part1.$(SRC_EXT)
 PART2_SRC_FILE = Part2.$(SRC_EXT)
@@ -15,7 +15,7 @@ PART1_OUT_PATH = $(PART1_SRC_PATH:$(SRC_DIR)/%.$(SRC_EXT)=$(OUT_DIR)/%.$(OUT_EXT
 PART2_OUT_PATH = $(PART2_SRC_PATH:$(SRC_DIR)/%.$(SRC_EXT)=$(OUT_DIR)/%.$(OUT_EXT))
 
 # Compiler
-COMPILER := docker compose run --build -it --rm purescript spago bundle-app
+COMPILER := docker compose run -it --rm purescript spago bundle-app
 COMPILER_OPTS := --platform node
 # Runtime
 RUNTIME := docker run -it --rm --name=AoC-Day5 -v "$(shell pwd):/app:rw" -w /app node:20 node
@@ -39,7 +39,7 @@ run_p2: $(PART2_OUT_PATH)
 build:
 	$(COMPILER) $(COMPILER_OPTS)
 clean:
-	rm -rf $(OUT_DIR)/* && touch $(OUT_DIR)/.keep
+	rm -f $(OUT_DIR)/*.$(OUT_EXT)
 
 $(PART1_OUT_PATH): $(PART1_SRC_PATH)
 	$(COMPILER) $(COMPILER_OPTS) --to $@ --main Part1
