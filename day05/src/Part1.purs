@@ -28,9 +28,11 @@ type InputFile =
     , maps :: Array (Array MapRange)
     }
 
--- testParse :: String -> Array String
--- testParse input = split (Pattern "\n\n") input
 
+
+--
+-- Parsing Logic
+--
 parseSeeds :: String -> Maybe (Array Int)
 parseSeeds line = sequence $ map fromString (drop 1 $ split (Pattern " ") line)
 
@@ -56,8 +58,16 @@ parseInput input = do
     pure { seeds: seeds, maps: maps }
 
 
-greet :: String -> String
-greet name = "Hello, " <> name <> "!"
+
+--
+-- Solving Logic
+--
+mapSeed :: Array MapRange -> Int -> Int
+mapSeed maps seed = 
+
+solvePart1 :: String -> Maybe Int
+solvePart1 rawInput =  do
+    input <- parseInput rawInput
 
 main :: Effect Unit
 main = do
