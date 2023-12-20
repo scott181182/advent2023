@@ -2,8 +2,10 @@
 , dependencies =
   [ "arrays"
   , "console"
+  , "debug"
   , "effect"
   , "foldable-traversable"
+  , "int64"
   , "integers"
   , "maybe"
   , "node-buffer"

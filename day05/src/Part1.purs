@@ -5,8 +5,9 @@ import Control.Apply
 import Effect (Effect)
 import Effect.Console (log, logShow)
 
-import Data.Array (drop, head, last, tail, (!!))
-import Data.Int (fromString)
+import Data.Array (drop, find, head, last, tail, (!!))
+import Data.Foldable (minimum, foldl)
+import Data.Int64 (Int64, fromString)
 import Data.Maybe
 import Data.String (split)
 import Data.String.Pattern (Pattern(..))
@@ -19,12 +20,12 @@ import Node.Process (argv)
 
 
 type MapRange =
-    { source :: Int
-    , destination :: Int
-    , size :: Int
+    { source :: Int64
+    , destination :: Int64
+    , size :: Int64
     }
 type InputFile =
-    { seeds :: Array Int
+    { seeds :: Array Int64
     , maps :: Array (Array MapRange)
     }
 
@@ -33,7 +34,7 @@ type InputFile =
 --
 -- Parsing Logic
 --
-parseSeeds :: String -> Maybe (Array Int)
+parseSeeds :: String -> Maybe (Array Int64)
 parseSeeds line = sequence $ map fromString (drop 1 $ split (Pattern " ") line)
 
 parseMapRange :: String -> Maybe MapRange
@@ -62,12 +63,26 @@ parseInput input = do
 --
 -- Solving Logic
 --
-mapSeed :: Array MapRange -> Int -> Int
-mapSeed maps seed = 
+isSeedInRange :: Int64 -> MapRange -> Boolean
+isSeedInRange seed range =
+    seed >= range.source && seed < range.source + range.size
+mapSeedInRange :: Int64 -> MapRange -> Int64
+mapSeedInRange seed range = seed - range.source + range.destination
 
-solvePart1 :: String -> Maybe Int
-solvePart1 rawInput =  do
+mapSeedInRanges :: Array MapRange -> Int64 -> Int64
+mapSeedInRanges maps seed =
+    maybe seed (mapSeedInRange seed) (find (isSeedInRange seed) maps)
+
+mapSeedsInRanges :: Array Int64 -> Array MapRange -> Array Int64
+mapSeedsInRanges seeds ranges =
+    map (mapSeedInRanges ranges) seeds
+
+solvePart1 :: String -> Maybe Int64
+solvePart1 rawInput = do
     input <- parseInput rawInput
+    minimum (foldl mapSeedsInRanges input.seeds input.maps)
+
+
 
 main :: Effect Unit
 main = do
@@ -76,5 +91,6 @@ main = do
         Just filename -> do
             log filename
             rawInput <- readTextFile UTF8 filename
-            logShow $ parseInput rawInput
+            -- logShow $ parseInput rawInput
+            logShow $ solvePart1 rawInput
         Nothing -> log "No file given"
