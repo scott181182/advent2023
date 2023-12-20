@@ -11,13 +11,13 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Crystal ([Day 3](./day03/README.md))
 - Perl ([Day 4](./day04/README.md))
 - PureScript ([Day 5](./day05/README.md))
+- C++ ([Day 6](./day06/README.md))
 - Ruby
 - Prolog
 - Haskell
 - Go
 - Processing
 - MatLab
-- C++
 - Assembly
 - C
 - TypeScript
