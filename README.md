@@ -12,7 +12,7 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Perl ([Day 4](./day04/README.md))
 - PureScript ([Day 5](./day05/README.md))
 - C++ ([Day 6](./day06/README.md))
-- Ruby
+- Ruby ([Day 7](./day07/README.md))
 - Prolog
 - Haskell
 - Go
