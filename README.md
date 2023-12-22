@@ -13,8 +13,8 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - PureScript ([Day 5](./day05/README.md))
 - C++ ([Day 6](./day06/README.md))
 - Ruby ([Day 7](./day07/README.md))
+- Haskell ([Day 8](./day08/README.md))
 - Prolog
-- Haskell
 - Go
 - Processing
 - MatLab
