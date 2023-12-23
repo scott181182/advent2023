@@ -1,0 +1,4 @@
+dist-newstyle
+
+configs/cabal/*
+!configs/cabal/.keep
