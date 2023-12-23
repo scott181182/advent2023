@@ -15,6 +15,7 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Ruby ([Day 7](./day07/README.md))
 - Haskell ([Day 8](./day08/README.md))
 - MatLab ([Day 9](./day09/README.md))
+- Lua ([Day 10](./day10/README.md))
 - Prolog
 - Go
 - Processing
@@ -24,7 +25,6 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Racket
 - Bash
 - Groovy
-- Lua
 - Blockly
 - C#
 - PHP
