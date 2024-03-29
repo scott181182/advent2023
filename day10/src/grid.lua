@@ -18,6 +18,28 @@ function Grid:parse(lines)
     return grid
 end
 
+---@param width integer
+---@param height integer
+---@return Grid
+function Grid:blank(width, height)
+    local grid = {}
+    setmetatable(grid, Grid)
+    grid.width = width
+    grid.height = height
+
+    local lines = {}
+    for _=1,height do
+        table.insert(lines, string.rep(".", width))
+    end
+    grid.lines = lines
+    return grid
+end
+
+--- @return Coord[][]
+function Grid:normals()
+    local start = self:find_start_location()
+end
+
 ---@param x integer
 ---@param y integer
 ---@return string

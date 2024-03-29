@@ -25,6 +25,98 @@ end
 
 
 
+--- @alias Vec2 { x: number, y: number }
+--- @alias PathSegment { coord: Coord, normal: Vec2 }
+
+--- @class Path
+--- @field start Coord
+--- @field width integer
+--- @field height integer
+--- @field segments PathSegment[]
+Path = {}
+Path.__index = Path
+
+---@param start Coord
+---@param segments PathSegment[]
+---@return Path
+function Path:new(start, segments)
+    local path = {}
+    setmetatable(path, Path)
+    path.start = start
+    path.segments = segments
+
+    local width, height = get_path_bounds(segments)
+    path.width = width
+    path.height = height
+
+    return path
+end
+
+---@param segs PathSegment[]
+---@return integer, integer
+function get_path_bounds(segs)
+    local c1 = segs[1].coord
+    local min_x = c1.x
+    local max_x = c1.x
+    local min_y = c1.y
+    local max_y = c1.y
+
+    for _, seg in ipairs(segs) do
+        if seg.coord.x < min_x then
+            min_x = seg.coord.x
+        elseif seg.coord.x > max_x then
+            max_x = seg.coord.x
+        end
+
+        if seg.coord.y < min_y then
+            min_y = seg.coord.y
+        elseif seg.coord.y > max_y then
+            max_y = seg.coord.y
+        end
+    end
+
+    return max_x - min_x + 1, max_y - min_y + 1
+end
+
+---@return integer
+function Path:length()
+    return #self.segments
+end
+---@param x integer
+---@param y integer
+---@return PathSegment | nil
+function Path:get_segment(x, y)
+    for _, seg in ipairs(self.segments) do
+        if seg.coord.x == x and seg.coord.y == y then
+            return seg
+        end
+    end
+
+    return nil
+end
+
+---@return integer
+function Path:get_area()
+    local total = 0
+
+    for y=1,self.height do
+        local running_norm = 0
+        for x=1,self.width do
+            local maybe_seg = self:get_segment(x, y)
+            if maybe_seg ~= nil then
+                running_norm = running_norm + maybe_seg.normal.x
+            end
+
+            if running_norm <= -1 and maybe_seg == nil then
+                total = total + 1
+            end
+        end
+    end
+
+    return total
+end
+
+
 
 --- @param grid Grid
 --- @param path Coord[]
@@ -100,8 +192,221 @@ function explore_path(grid, path, coord, direction)
     return explore_path(grid, path, next_coord, next_direction)
 end
 
+
+
+---@param grid Grid
+---@param coords Coord[]
+---@return integer, PathSegment
+function find_leftmost_segment(grid, coords)
+    -- Skip the starting coord, since that's the "S" character
+    local left_coord = coords[2]
+    local left_idx = 2
+
+    for i, c in ipairs(coords) do
+        if c.x < left_coord.x then
+            left_coord = c
+            left_idx = i
+        end
+    end
+
+    local sym = grid:get_character(left_coord.x, left_coord.y)
+    ---@type Vec2 | nil
+    local normal = nil
+
+    if sym == "|" then
+        normal = { x = -1.0, y = 0.0 }
+    elseif sym == "F" then 
+        normal = { x = -0.5, y = 0.5 }
+    elseif sym == "L" then
+        normal = { x = -0.5, y = -0.5 }
+    end
+
+    return left_idx, { coord = left_coord, normal = normal }
+end
+
+
+
+---@param coords Coord[]
+---@return string
+function infer_start_symbol(coords)
+    local dir_in = get_direction(coords[#coords - 1], coords[1])
+    local dir_out = get_direction(coords[1], coords[2])
+
+    if dir_in == Direction.DOWN then
+        if dir_out == Direction.DOWN then
+            return "|"
+        elseif dir_out == Direction.LEFT then
+            return "J"
+        elseif dir_out == Direction.RIGHT then
+            return "L"
+        end
+    elseif dir_in == Direction.UP then
+        if dir_out == Direction.UP then
+            return "|"
+        elseif dir_out == Direction.LEFT then
+            return "7"
+        elseif dir_out == Direction.RIGHT then
+            return "F"
+        end
+    elseif dir_in == Direction.LEFT then
+        if dir_out == Direction.DOWN then
+            return "7"
+        elseif dir_out == Direction.LEFT then
+            return "-"
+        elseif dir_out == Direction.UP then
+            return "J"
+        end
+    elseif dir_in == Direction.RIGHT then
+        if dir_out == Direction.DOWN then
+            return "F"
+        elseif dir_out == Direction.UP then
+            return "L"
+        elseif dir_out == Direction.RIGHT then
+            return "-"
+        end
+        ---@diagnostic disable-next-line: missing-return
+    end
+end
+
+---@param sym string
+---@param dir integer
+---@param last_normal Vec2
+---@return Vec2
+function get_normal(sym, dir, last_normal)
+    if sym == "|" then
+        return {
+            x = last_normal.x > 0 and 1.0 or -1.0,
+            y = 0
+        }
+    elseif sym == "-" then
+        return {
+            x = 0,
+            y = last_normal.y > 0 and 1.0 or -1.0
+        }
+    elseif sym == "F" then
+        if dir == Direction.UP then
+            return {
+                x = 0.5 * sgn(last_normal.x),
+                y = -0.5 * sgn(last_normal.x)
+            }
+        else 
+            return {
+                x = -0.5 * sgn(last_normal.y),
+                y = 0.5 * sgn(last_normal.y)
+            }
+        end
+    elseif sym == "L" then
+        if dir == Direction.DOWN then
+            return {
+                x = 0.5 * sgn(last_normal.x),
+                y = 0.5 * sgn(last_normal.x)
+            }
+        else 
+            return {
+                x = 0.5 * sgn(last_normal.y),
+                y = 0.5 * sgn(last_normal.y)
+            }
+        end
+    elseif sym == "7" then
+        if dir == Direction.UP then
+            return {
+                x = 0.5 * sgn(last_normal.x),
+                y = 0.5 * sgn(last_normal.x)
+            }
+        else 
+            return {
+                x = 0.5 * sgn(last_normal.y),
+                y = 0.5 * sgn(last_normal.y)
+            }
+        end
+    elseif sym == "J" then
+        if dir == Direction.DOWN then
+            return {
+                x = 0.5 * sgn(last_normal.x),
+                y = -0.5 * sgn(last_normal.x)
+            }
+        else 
+            return {
+                x = -0.5 * sgn(last_normal.y),
+                y = 0.5 * sgn(last_normal.y)
+            }
+        end
+        ---@diagnostic disable-next-line: missing-return
+    end
+end
+
+---@param grid Grid
+---@param coords Coord[]
+---@param idx integer
+---@param segments PathSegment[]
+---@return PathSegment[]
+function calculate_normals_forward(grid, coords, idx, segments)
+    if idx > #coords then return segments end
+
+    local next_coord = coords[idx]
+    local sym = grid:get_character(next_coord.x, next_coord.y)
+    local last_coord = segments[#segments].coord
+    local last_normal = segments[#segments].normal
+    local dir = get_direction(last_coord, next_coord)
+
+    if sym == "S" then
+        sym = infer_start_symbol(coords)
+    end
+
+    local normal = get_normal(sym, dir, last_normal)
+
+    table.insert(segments, { coord = next_coord, normal = normal })
+    return calculate_normals_forward(grid, coords, idx + 1, segments)
+end
+---@param grid Grid
+---@param coords Coord[]
+---@param idx integer
+---@param segments PathSegment[]
+---@return PathSegment[]
+function calculate_normals_backward(grid, coords, idx, segments)
+    if idx < 1 then return segments end
+
+    local next_coord = coords[idx]
+    local sym = grid:get_character(next_coord.x, next_coord.y)
+    local last_coord = segments[1].coord
+    local last_normal = segments[1].normal
+    local dir = get_direction(last_coord, next_coord)
+
+    if sym == "S" then
+        -- TODO: determine the "actual" symbol.
+        sym = infer_start_symbol(coords)
+    end
+
+    local normal = get_normal(sym, dir, last_normal)
+
+    table.insert(segments, 1, { coord = next_coord, normal = normal })
+    return calculate_normals_backward(grid, coords, idx - 1, segments)
+end
+
+---@param grid Grid
+---@param coords Coord[]
+---@return PathSegment[]
+function calculate_normals(grid, coords)
+    local first_idx, first_seg = find_leftmost_segment(grid, coords)
+
+    ---@type PathSegment[]
+    local segments = { first_seg }
+    calculate_normals_forward(grid, coords, first_idx + 1, segments)
+    calculate_normals_backward(grid, coords, first_idx - 1, segments)
+
+    -- for _, c in ipairs(coords) do
+    --     segments[#segments+1] = { coord = c, normal = { x = 0.0, y = 0.0 } }
+    -- end
+
+
+
+    return segments
+end
+
+
+
 --- @param grid Grid
---- @return { start: Coord, path: Coord[] } | nil
+--- @return Path | nil
 function find_main_loop(grid)
     local start = grid:find_start_location()
 
@@ -111,7 +416,7 @@ function find_main_loop(grid)
 
     if res == nil then
         -- Try Down
-        path = { start}
+        path = { start }
         res = explore_path(grid, path, { x=start.x, y=start.y + 1 }, Direction.DOWN)
     end
     if res == nil then
@@ -123,5 +428,7 @@ function find_main_loop(grid)
 
     if res == nil then return nil end
 
-    return { start = start, path = path }
+    local segments = calculate_normals(grid, res)
+
+    return Path:new(start, segments)
 end

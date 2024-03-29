@@ -10,8 +10,25 @@ function print_coord(coord)
 end
 --- @param path Coord[]
 function print_path(path)
-    for i, c in ipairs(path) do
+    for _, c in ipairs(path) do
         print_coord(c)
+    end
+end
+
+
+---@param grid Grid
+---@param path Path
+function print_normals(grid, path) 
+    for y=1,grid.height do
+        for x=1,grid.width do
+            local maybe_seg = path:get_segment(x, y)
+            if maybe_seg == nil then
+                io.write(".")
+            else
+                io.write("X")
+            end
+        end
+        print("")
     end
 end
 
@@ -25,4 +42,16 @@ function read_lines(filename)
         lines[#lines + 1] = line
     end
     return lines
+end
+
+
+
+---@param num number
+---@return number
+function sgn(num)
+    if num < 0 then
+        return -1.0
+    else
+        return 1.0
+    end
 end
