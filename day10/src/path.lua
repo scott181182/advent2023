@@ -30,6 +30,28 @@ NextDirectionMap = {
         ["7"] = Direction.DOWN,
     }
 }
+StartSymbolMap = {
+    [Direction.UP] = {
+        [Direction.UP] = "|",
+        [Direction.LEFT] = "7",
+        [Direction.RIGHT] = "F",
+    },
+    [Direction.DOWN] = {
+        [Direction.DOWN] = "|",
+        [Direction.LEFT] = "J",
+        [Direction.RIGHT] = "L",
+    },
+    [Direction.LEFT] = {
+        [Direction.DOWN] = "7",
+        [Direction.LEFT] = "-",
+        [Direction.UP] = "J",
+    },
+    [Direction.RIGHT] = {
+        [Direction.DOWN] = "F",
+        [Direction.RIGHT] = "-",
+        [Direction.UP] = "L",
+    }
+}
 
 --- @param from Coord
 --- @param to Coord
@@ -220,40 +242,7 @@ function infer_start_symbol(coords)
     local dir_in = get_direction(coords[#coords - 1], coords[1])
     local dir_out = get_direction(coords[1], coords[2])
 
-    if dir_in == Direction.DOWN then
-        if dir_out == Direction.DOWN then
-            return "|"
-        elseif dir_out == Direction.LEFT then
-            return "J"
-        elseif dir_out == Direction.RIGHT then
-            return "L"
-        end
-    elseif dir_in == Direction.UP then
-        if dir_out == Direction.UP then
-            return "|"
-        elseif dir_out == Direction.LEFT then
-            return "7"
-        elseif dir_out == Direction.RIGHT then
-            return "F"
-        end
-    elseif dir_in == Direction.LEFT then
-        if dir_out == Direction.DOWN then
-            return "7"
-        elseif dir_out == Direction.LEFT then
-            return "-"
-        elseif dir_out == Direction.UP then
-            return "J"
-        end
-    elseif dir_in == Direction.RIGHT then
-        if dir_out == Direction.DOWN then
-            return "F"
-        elseif dir_out == Direction.UP then
-            return "L"
-        elseif dir_out == Direction.RIGHT then
-            return "-"
-        end
-        ---@diagnostic disable-next-line: missing-return
-    end
+    return StartSymbolMap[dir_in][dir_out]
 end
 
 ---@param sym string
