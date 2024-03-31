@@ -17,9 +17,9 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - MatLab ([Day 9](./day09/README.md))
 - Lua ([Day 10](./day10/README.md))
 - Bash ([Day 11](./day11/README.md))
+- Processing ([Day 12](./day12/README.md))
 - Prolog
 - Go
-- Processing
 - Assembly
 - C
 - TypeScript
