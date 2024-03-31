@@ -1,0 +1,13 @@
+version: '3'
+services:
+  processing:
+    container_name: AoC-Day12
+    deploy:
+      restart_policy:
+        condition: none
+    working_dir: /app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ".:/app:rw"
