@@ -7,3 +7,5 @@ Link: [https://adventofcode.com/2023/day/11](https://adventofcode.com/2023/day/1
 ![Bash](wheel.png)
 
 ## Writeup
+
+You don't get a container today, so I hope you have `bash` installed.
