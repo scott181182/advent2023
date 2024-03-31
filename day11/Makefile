@@ -23,14 +23,7 @@ test_p1: $(PART1_SRC_PATH)
 run_p1: $(PART1_SRC_PATH)
 	@$(RUNTIME) $(PART1_SRC_PATH) input.txt
 
-test_p2: | test_p2_1 test_p2_2 test_p2_3 test_p2_4
-test_p2_1: $(PART2_SRC_PATH)
-	$(RUNTIME) $(PART2_SRC_PATH) test3.txt
-test_p2_2: $(PART2_SRC_PATH)
-	$(RUNTIME) $(PART2_SRC_PATH) test4.txt
-test_p2_3: $(PART2_SRC_PATH)
-	$(RUNTIME) $(PART2_SRC_PATH) test5.txt
-test_p2_4: $(PART2_SRC_PATH)
-	$(RUNTIME) $(PART2_SRC_PATH) test6.txt
+test_p2: $(PART2_SRC_PATH)
+	$(RUNTIME) $(PART2_SRC_PATH) test1.txt
 run_p2: $(PART2_SRC_PATH)
 	@$(RUNTIME) $(PART2_SRC_PATH) input.txt
