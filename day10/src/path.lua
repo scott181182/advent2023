@@ -341,12 +341,6 @@ function calculate_normals(grid, coords)
     calculate_normals_forward(grid, coords, first_idx + 1, segments)
     calculate_normals_backward(grid, coords, first_idx - 1, segments)
 
-    -- for _, c in ipairs(coords) do
-    --     segments[#segments+1] = { coord = c, normal = { x = 0.0, y = 0.0 } }
-    -- end
-
-
-
     return segments
 end
 
