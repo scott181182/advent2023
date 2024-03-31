@@ -25,7 +25,6 @@ end
 
 
 
---- @alias Vec2 { x: number, y: number }
 --- @alias PathSegment { coord: Coord, normal: Vec2 }
 
 --- @class Path
@@ -133,7 +132,7 @@ function explore_path(grid, path, coord, direction)
     -- print("    " .. next_sym)
 
     -- Short-circuit for finishing the path
-    if next_sym == "S" then 
+    if next_sym == "S" then
         table.insert(path, coord)
         return path
     end
@@ -144,7 +143,7 @@ function explore_path(grid, path, coord, direction)
     if direction == Direction.UP then
         if next_sym == "|" then
             next_direction = Direction.UP
-        elseif next_sym == "7" then 
+        elseif next_sym == "7" then
             next_direction = Direction.LEFT
         elseif next_sym == "F" then
             next_direction = Direction.RIGHT
@@ -152,7 +151,7 @@ function explore_path(grid, path, coord, direction)
     elseif direction == Direction.DOWN then
         if next_sym == "|" then
             next_direction = Direction.DOWN
-        elseif next_sym == "J" then 
+        elseif next_sym == "J" then
             next_direction = Direction.LEFT
         elseif next_sym == "L" then
             next_direction = Direction.RIGHT
@@ -160,7 +159,7 @@ function explore_path(grid, path, coord, direction)
     elseif direction == Direction.LEFT then
         if next_sym == "-" then
             next_direction = Direction.LEFT
-        elseif next_sym == "F" then 
+        elseif next_sym == "F" then
             next_direction = Direction.DOWN
         elseif next_sym == "L" then
             next_direction = Direction.UP
@@ -168,7 +167,7 @@ function explore_path(grid, path, coord, direction)
     elseif direction == Direction.RIGHT then
         if next_sym == "-" then
             next_direction = Direction.RIGHT
-        elseif next_sym == "J" then 
+        elseif next_sym == "J" then
             next_direction = Direction.UP
         elseif next_sym == "7" then
             next_direction = Direction.DOWN
@@ -214,11 +213,11 @@ function find_leftmost_segment(grid, coords)
     local normal = nil
 
     if sym == "|" then
-        normal = { x = -1.0, y = 0.0 }
-    elseif sym == "F" then 
-        normal = { x = -0.5, y = 0.5 }
+        normal = VECS.Down
+    elseif sym == "F" then
+        normal = VECS.UpLeft
     elseif sym == "L" then
-        normal = { x = -0.5, y = -0.5 }
+        normal = VECS.DownLeft
     end
 
     return left_idx, { coord = left_coord, normal = normal }
@@ -274,62 +273,32 @@ end
 ---@return Vec2
 function get_normal(sym, dir, last_normal)
     if sym == "|" then
-        return {
-            x = last_normal.x > 0 and 1.0 or -1.0,
-            y = 0
-        }
+        return VECS.Right:inverse_if(last_normal.x < 0)
     elseif sym == "-" then
-        return {
-            x = 0,
-            y = last_normal.y > 0 and 1.0 or -1.0
-        }
+        return VECS.Up:inverse_if(last_normal.y < 0)
     elseif sym == "F" then
         if dir == Direction.UP then
-            return {
-                x = 0.5 * sgn(last_normal.x),
-                y = -0.5 * sgn(last_normal.x)
-            }
-        else 
-            return {
-                x = -0.5 * sgn(last_normal.y),
-                y = 0.5 * sgn(last_normal.y)
-            }
+            return VECS.DownRight:inverse_if(last_normal.x < 0)
+        else
+            return VECS.UpLeft:inverse_if(last_normal.y < 0)
         end
     elseif sym == "L" then
         if dir == Direction.DOWN then
-            return {
-                x = 0.5 * sgn(last_normal.x),
-                y = 0.5 * sgn(last_normal.x)
-            }
-        else 
-            return {
-                x = 0.5 * sgn(last_normal.y),
-                y = 0.5 * sgn(last_normal.y)
-            }
+            return VECS.UpRight:inverse_if(last_normal.x < 0)
+        else
+            return VECS.UpRight:inverse_if(last_normal.y < 0)
         end
     elseif sym == "7" then
         if dir == Direction.UP then
-            return {
-                x = 0.5 * sgn(last_normal.x),
-                y = 0.5 * sgn(last_normal.x)
-            }
-        else 
-            return {
-                x = 0.5 * sgn(last_normal.y),
-                y = 0.5 * sgn(last_normal.y)
-            }
+            return VECS.UpRight:inverse_if(last_normal.x < 0)
+        else
+            return VECS.UpRight:inverse_if(last_normal.y < 0)
         end
     elseif sym == "J" then
         if dir == Direction.DOWN then
-            return {
-                x = 0.5 * sgn(last_normal.x),
-                y = -0.5 * sgn(last_normal.x)
-            }
-        else 
-            return {
-                x = -0.5 * sgn(last_normal.y),
-                y = 0.5 * sgn(last_normal.y)
-            }
+            return VECS.DownRight:inverse_if(last_normal.x < 0)
+        else
+            return VECS.UpLeft:inverse_if(last_normal.y < 0)
         end
         ---@diagnostic disable-next-line: missing-return
     end
