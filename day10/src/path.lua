@@ -8,6 +8,29 @@ Direction = {
     RIGHT = 3
 }
 
+NextDirectionMap = {
+    [Direction.UP] = {
+        ["|"] = Direction.UP,
+        ["7"] = Direction.LEFT,
+        ["F"] = Direction.RIGHT,
+    },
+    [Direction.DOWN] = {
+        ["|"] = Direction.DOWN,
+        ["J"] = Direction.LEFT,
+        ["L"] = Direction.RIGHT,
+    },
+    [Direction.LEFT] = {
+        ["-"] = Direction.LEFT,
+        ["F"] = Direction.DOWN,
+        ["L"] = Direction.UP,
+    },
+    [Direction.RIGHT] = {
+        ["-"] = Direction.RIGHT,
+        ["J"] = Direction.UP,
+        ["7"] = Direction.DOWN,
+    }
+}
+
 --- @param from Coord
 --- @param to Coord
 --- @return integer
@@ -20,6 +43,7 @@ function get_direction(from, to)
         return Direction.DOWN
     elseif from.y == to.y + 1 then
         return Direction.UP
+    ---@diagnostic disable-next-line: missing-return
     end
 end
 
@@ -138,42 +162,7 @@ function explore_path(grid, path, coord, direction)
     end
 
     --- @type integer | nil
-    local next_direction = nil
-
-    if direction == Direction.UP then
-        if next_sym == "|" then
-            next_direction = Direction.UP
-        elseif next_sym == "7" then
-            next_direction = Direction.LEFT
-        elseif next_sym == "F" then
-            next_direction = Direction.RIGHT
-        end
-    elseif direction == Direction.DOWN then
-        if next_sym == "|" then
-            next_direction = Direction.DOWN
-        elseif next_sym == "J" then
-            next_direction = Direction.LEFT
-        elseif next_sym == "L" then
-            next_direction = Direction.RIGHT
-        end
-    elseif direction == Direction.LEFT then
-        if next_sym == "-" then
-            next_direction = Direction.LEFT
-        elseif next_sym == "F" then
-            next_direction = Direction.DOWN
-        elseif next_sym == "L" then
-            next_direction = Direction.UP
-        end
-    elseif direction == Direction.RIGHT then
-        if next_sym == "-" then
-            next_direction = Direction.RIGHT
-        elseif next_sym == "J" then
-            next_direction = Direction.UP
-        elseif next_sym == "7" then
-            next_direction = Direction.DOWN
-        end
-    end
-
+    local next_direction = NextDirectionMap[direction][next_sym]
     if next_direction == nil then return nil end
 
     local next_coord = { x = coord.x, y = coord.y }
