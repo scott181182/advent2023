@@ -52,8 +52,11 @@ class Pattern {
 
     public int getAnswer() {
         int left = this.findColReflection();
-        int above = this.findRowReflection();
-        return left + 1 + 100 * (above + 1);
+        if(left < 0) {
+            return 100 * (this.findRowReflection() + 1);
+        } else {
+            return left + 1;
+        }
     }
 }
 
