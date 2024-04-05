@@ -22,11 +22,11 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Go ([Day 14](./day14/README.md))
 - TypeScript ([Day 15](./day15/README.md))
 - Python ([Day 16](./day16/README.md))
+- Groovy ([Day 17](./day17/README.md))
 - Prolog
 - Assembly
 - C
 - Racket
-- Groovy
 - Blockly
 - PHP
 - Rust
