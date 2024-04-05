@@ -21,6 +21,7 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - C# ([Day 13](./day13/README.md))
 - Go ([Day 14](./day14/README.md))
 - TypeScript ([Day 15](./day15/README.md))
+- Python ([Day 16](./day16/README.md))
 - Prolog
 - Assembly
 - C
@@ -31,7 +32,6 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Rust
 - Clojure
 - JavaScript
-- Python
 - Forth
 
 My goal isn't to make the most optimized solution each day, but to make a fun solution in the given language and keep
