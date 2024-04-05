@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"strings"
 )
 
@@ -20,21 +21,31 @@ func parsePlatform(lines []string) Platform {
 
 	return Platform{board}
 }
-func (p *Platform) WithoutRoundedRocks() Platform {
+func (p *Platform) Clone() Platform {
 	board := make([][]uint8, len(p.board))
 
 	for i := 0; i < len(p.board); i++ {
 		board[i] = make([]uint8, len(p.board[i]))
-		for j := 0; j < len(p.board[i]); j++ {
-			if p.board[i][j] == 'O' {
-				board[i][j] = '.'
-			} else {
-				board[i][j] = p.board[i][j]
-			}
-		}
+		copy(board[i], p.board[i])
 	}
 
 	return Platform{board}
+}
+func (p *Platform) CloneFrom(other *Platform) {
+	for i := 0; i < len(p.board); i++ {
+		for j := 0; j < len(p.board[i]); j++ {
+			p.board[i][j] = other.board[i][j]
+		}
+	}
+}
+func (p *Platform) Equals(other *Platform) bool {
+	for i := 0; i < len(p.board); i++ {
+		if !bytes.Equal(p.board[i], other.board[i]) {
+			return false
+		}
+	}
+
+	return true
 }
 
 func (p *Platform) String() string {
@@ -45,6 +56,36 @@ func (p *Platform) String() string {
 			sb.WriteByte(p.board[i][j])
 		}
 		sb.WriteRune('\n')
+	}
+
+	return sb.String()
+}
+func (p *Platform) Hash() string {
+	var sb strings.Builder
+	var buf byte
+	bufl := 0
+	for i := 0; i < len(p.board); i++ {
+		for j := 0; j < len(p.board[i]); j++ {
+			if p.board[i][j] == '#' {
+				continue
+			}
+
+			buf <<= 1
+			bufl++
+			if p.board[i][j] == 'O' {
+				buf |= 1
+			}
+
+			if bufl > 6 {
+				sb.WriteByte(0x21 + buf)
+				buf = 0
+				bufl = 0
+			}
+		}
+	}
+
+	if bufl > 0 {
+		sb.WriteByte(0x21 + buf)
 	}
 
 	return sb.String()
@@ -123,13 +164,43 @@ func (p *Platform) SlideWest() {
 		for col := 0; col < len(p.board[row]); col++ {
 			nextChar := p.board[row][col]
 			if nextChar == '#' {
-				nextOpenIdx = col - 1
+				nextOpenIdx = col + 1
 			} else if nextChar == 'O' {
 				p.board[row][col] = '.'
 				p.board[row][nextOpenIdx] = 'O'
 
 				nextOpenIdx++
 			}
+		}
+	}
+}
+
+func (p *Platform) SpinCycle() {
+	p.SlideNorth()
+	// fmt.Println(p.String())
+	p.SlideWest()
+	// fmt.Println(p.String())
+	p.SlideSouth()
+	// fmt.Println(p.String())
+	p.SlideEast()
+}
+
+func (p *Platform) RepeatSpin(times int) {
+	cycleMap := make(map[string]int)
+
+	for i := 0; i < times; i++ {
+		p.SpinCycle()
+		hash := p.Hash()
+
+		if prevCycle, ok := cycleMap[hash]; ok {
+			period := i - prevCycle
+			remaining := times - i
+			offset := remaining%period - 1
+			// fmt.Printf("Cycle: %d -> %d (times offset: %d)\n", prevCycle, i, offset)
+			p.RepeatSpin(offset)
+			return
+		} else {
+			cycleMap[hash] = i
 		}
 	}
 }
