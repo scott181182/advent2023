@@ -25,6 +25,6 @@ func main() {
 	} else if cmd == "part2" {
 		part2(platform)
 	} else {
-		stderr.Fatalln("Unknown command: '%s'", cmd)
+		stderr.Fatalf("Unknown command: '%s'\n", cmd)
 	}
 }
