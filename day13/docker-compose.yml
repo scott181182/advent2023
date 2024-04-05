@@ -1,0 +1,11 @@
+version: '3'
+services:
+  dotnet:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: AoC-Day13
+    deploy:
+      restart_policy:
+        condition: none
+    working_dir: /app
+    volumes:
+      - ".:/app:rw"
