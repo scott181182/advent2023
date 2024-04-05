@@ -5,8 +5,8 @@ import (
 )
 
 func part1(p Platform) {
-	afterSlide := p.SlideNorth()
+	p.SlideNorth()
 	// fmt.Println(afterSlide.String())
-	load := afterSlide.CalculateNorthLoad()
+	load := p.CalculateNorthLoad()
 	fmt.Println("Load: ", load)
 }

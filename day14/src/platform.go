@@ -63,9 +63,7 @@ func (p *Platform) CalculateNorthLoad() int {
 	return load
 }
 
-func (p *Platform) SlideNorth() Platform {
-	ret := p.WithoutRoundedRocks()
-
+func (p *Platform) SlideNorth() {
 	for col := 0; col < len(p.board[0]); col++ {
 		// Iterate columns down
 		nextOpenIdx := 0
@@ -77,13 +75,61 @@ func (p *Platform) SlideNorth() Platform {
 			} else if nextChar == 'O' {
 				// fmt.Printf("Rock at (%d, %d) going to %d\n", row, col, nextOpenIdx)
 				// Roll the rock upwards
-				ret.board[nextOpenIdx][col] = 'O'
+				p.board[row][col] = '.'
+				p.board[nextOpenIdx][col] = 'O'
 
 				// Next one will have to roll on top of this one
 				nextOpenIdx++
 			}
 		}
 	}
+}
+func (p *Platform) SlideSouth() {
+	for col := 0; col < len(p.board[0]); col++ {
+		nextOpenIdx := len(p.board) - 1
+		for row := len(p.board) - 1; row >= 0; row-- {
+			nextChar := p.board[row][col]
+			if nextChar == '#' {
+				nextOpenIdx = row - 1
+			} else if nextChar == 'O' {
+				p.board[row][col] = '.'
+				p.board[nextOpenIdx][col] = 'O'
 
-	return ret
+				nextOpenIdx--
+			}
+		}
+	}
+}
+
+func (p *Platform) SlideEast() {
+	for row := 0; row < len(p.board); row++ {
+		nextOpenIdx := len(p.board[row]) - 1
+		for col := len(p.board[row]) - 1; col >= 0; col-- {
+			nextChar := p.board[row][col]
+			if nextChar == '#' {
+				nextOpenIdx = col - 1
+			} else if nextChar == 'O' {
+				p.board[row][col] = '.'
+				p.board[row][nextOpenIdx] = 'O'
+
+				nextOpenIdx--
+			}
+		}
+	}
+}
+func (p *Platform) SlideWest() {
+	for row := 0; row < len(p.board); row++ {
+		nextOpenIdx := 0
+		for col := 0; col < len(p.board[row]); col++ {
+			nextChar := p.board[row][col]
+			if nextChar == '#' {
+				nextOpenIdx = col - 1
+			} else if nextChar == 'O' {
+				p.board[row][col] = '.'
+				p.board[row][nextOpenIdx] = 'O'
+
+				nextOpenIdx++
+			}
+		}
+	}
 }
