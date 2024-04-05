@@ -19,8 +19,8 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Bash ([Day 11](./day11/README.md))
 - Processing ([Day 12](./day12/README.md))
 - C# ([Day 13](./day13/README.md))
+- Go ([Day 14](./day14/README.md))
 - Prolog
-- Go
 - Assembly
 - C
 - TypeScript
