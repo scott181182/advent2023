@@ -18,6 +18,7 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Lua ([Day 10](./day10/README.md))
 - Bash ([Day 11](./day11/README.md))
 - Processing ([Day 12](./day12/README.md))
+- C# ([Day 13](./day13/README.md))
 - Prolog
 - Go
 - Assembly
@@ -26,7 +27,6 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Racket
 - Groovy
 - Blockly
-- C#
 - PHP
 - Rust
 - Clojure
