@@ -20,10 +20,10 @@ Each day I'll be spinning a [wheel of names](https://wheelofnames.com/) to deter
 - Processing ([Day 12](./day12/README.md))
 - C# ([Day 13](./day13/README.md))
 - Go ([Day 14](./day14/README.md))
+- TypeScript ([Day 15](./day15/README.md))
 - Prolog
 - Assembly
 - C
-- TypeScript
 - Racket
 - Groovy
 - Blockly
